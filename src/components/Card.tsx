@@ -31,7 +31,10 @@ export const Card: React.FC<CardProps> = ({
     transform,
     transition,
     isDragging: isSortableDragging,
-  } = useSortable({ id: card.id });
+  } = useSortable({ 
+    id: card.id,
+    disabled: isEditing
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -67,6 +70,7 @@ export const Card: React.FC<CardProps> = ({
   };
 
   const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     onDelete(card.id);
   };
@@ -121,7 +125,11 @@ export const Card: React.FC<CardProps> = ({
               {card.title}
             </h3>
             <p className="card-description">{card.description}</p>
-            <button onClick={handleDelete} className="delete-btn">
+            <button 
+              onClick={handleDelete} 
+              className="delete-btn"
+              onMouseDown={(e) => e.stopPropagation()}
+            >
               ×
             </button>
           </>
