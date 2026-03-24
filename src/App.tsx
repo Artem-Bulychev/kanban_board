@@ -145,13 +145,6 @@ function App() {
     }
   };
 
-  const handleCardsReorder = (columnId: 'todo' | 'inProgress' | 'done', cards: CardType[]) => {
-    setBoardState(prev => ({
-      ...prev,
-      [columnId]: cards,
-    }));
-  };
-
   const handleDragStart = (event: any) => {
     const { active } = event;
     const allCards = [...boardState.todo, ...boardState.inProgress, ...boardState.done];
@@ -191,7 +184,7 @@ function App() {
     let targetColumn: keyof BoardState | null = null;
     let targetIndex = -1;
 
-    // Check if dropping on a column header
+    // Check if dropping on a column
     if (columnConfig.some(col => col.id === overId)) {
       targetColumn = overId as keyof BoardState;
       targetIndex = boardState[targetColumn].length;
@@ -209,6 +202,12 @@ function App() {
     }
 
     if (!targetColumn) return;
+
+    // If dropping in the same column at the same position, do nothing
+    if (sourceColumn === targetColumn && cardsToMove.length === 1) {
+      const cardIndex = boardState[sourceColumn].findIndex(card => card.id === activeId);
+      if (cardIndex === targetIndex) return;
+    }
 
     // Move cards
     setBoardState(prev => {
@@ -272,8 +271,6 @@ function App() {
                 onCardSelect={handleCardSelect}
                 onCardUpdate={updateCard}
                 onCardDelete={deleteCard}
-                onCardsReorder={handleCardsReorder}
-                onCardsMove={() => {}}
               />
               <AddCardForm onAddCard={(title, description) => addCard(column.id, title, description)} />
             </div>
