@@ -86,12 +86,18 @@ function App() {
   };
 
   const deleteCard = (cardId: string) => {
+    console.log('deleteCard called with ID:', cardId);
     setBoardState(prev => {
       const newState = { ...prev };
+      console.log('Previous state:', prev);
       for (const columnId in newState) {
         const column = columnId as keyof BoardState;
+        const beforeCount = newState[column].length;
         newState[column] = newState[column].filter(card => card.id !== cardId);
+        const afterCount = newState[column].length;
+        console.log(`Column ${columnId}: ${beforeCount} -> ${afterCount} cards`);
       }
+      console.log('New state:', newState);
       return newState;
     });
     setSelectedCards(prev => {

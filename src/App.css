@@ -96,6 +96,15 @@ h1 {
 
 .card-content {
   text-align: left;
+  position: relative;
+}
+
+.card-main {
+  cursor: grab;
+}
+
+.card-main:active {
+  cursor: grabbing;
 }
 
 .card-title {

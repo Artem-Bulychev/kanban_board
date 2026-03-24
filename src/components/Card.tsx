@@ -72,6 +72,7 @@ export const Card: React.FC<CardProps> = ({
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('Delete button clicked for card:', card.id);
     onDelete(card.id);
   };
 
@@ -80,9 +81,6 @@ export const Card: React.FC<CardProps> = ({
       ref={setNodeRef}
       style={style}
       className={`card ${isSelected ? 'selected' : ''} ${isSortableDragging ? 'dragging' : ''}`}
-      onClick={handleCardClick}
-      {...attributes}
-      {...listeners}
     >
       <div className="card-content">
         {isEditing ? (
@@ -121,14 +119,22 @@ export const Card: React.FC<CardProps> = ({
           </div>
         ) : (
           <>
-            <h3 className="card-title" onClick={handleTitleClick}>
-              {card.title}
-            </h3>
-            <p className="card-description">{card.description}</p>
+            <div 
+              className="card-main" 
+              {...attributes} 
+              {...listeners}
+              onClick={handleCardClick}
+            >
+              <h3 className="card-title" onClick={handleTitleClick}>
+                {card.title}
+              </h3>
+              <p className="card-description">{card.description}</p>
+            </div>
             <button 
               onClick={handleDelete} 
               className="delete-btn"
               onMouseDown={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
             >
               ×
             </button>
